@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<ruleset name="Custom Security Configurations Rules"
+      xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+    <description>
+Custom rules
+    </description>
+
+   <rule name="FlyWay being used on Production"
+         language="java"
+         message="WARNING: Flyway strategy may drop the database. Check this is what you intend to do."
+         class="net.sourceforge.pmd.lang.rule.XPathRule">
+      <description>
+         The FlyWay migration strategy should only be used once.
+         Please check that this code is not going to be run again.
+      </description>
+      <priority>1</priority>
+      <properties>
+         <property name="version" value="2.0"/>
+         <property name="xpath">
+            <value>
+            <![CDATA[
+            //ClassOrInterfaceDeclaration[@SimpleName='FlyWayConfig']/descendant::SingleMemberAnnotation[@AnnotationName='profile']
+            //descendant::Literal[@Image='"prod"']
+            ]]>
+            </value>
+         </property>
+      </properties>
+   </rule>
+   
+   <rule name="Wildcards in API documentation for Swagger"
+      language="java"
+      message="Using wildcards for exposing API documentation may reveal sensitive information"
+      class="net.sourceforge.pmd.lang.rule.XPathRule">
+      <description>
+         It is important to check if you want to expose all the possible
+         paths as the API documentation.
+      </description>
+      <priority>5</priority>
+      <properties>
+         <property name="version" value="2.0"/>
+         <property name="xpath">
+            <value>
+            <![CDATA[
+            //child::PrimaryPrefix/Name[@Image='PathSelectors.regex']/../../descendant::Literal[@Image='"/*.*"']
+            ]]>
+            </value>
+         </property>
+      </properties>
+   </rule> 
+
+   <rule name="No allowed origins in CORS"
+         message="Check if the default paths should be allowed in the CORS configuration"
+         class="NoAllowedOriginsCors">
+      <description>
+         Explicitly declaring the allowed origins for Cross-Origin Resource Sharing in the API enhances the security by disallowing extraneous domains
+         from accessing it.
+      </description>
+      <priority>3</priority>
+   </rule>
+
+   <rule name="Wildcard paths in CORS"
+         language="java"
+         message="Check if wildcard paths should be allowed in the CORS configuration"
+         class="net.sourceforge.pmd.lang.rule.XPathRule">
+      <description>
+         Explicitly declaring the allowed origins for Cross-Origin
+         Resource Sharing in the API enhances the security by disallowing
+         extraneous domains from accessing it.
+      </description>
+      <priority>3</priority>
+      <properties>
+         <property name="version" value="2.0"/>
+         <property name="xpath">
+            <value>
+            <![CDATA[
+            //PrimaryPrefix/Name[@Image='config.addAllowedOrigin']/../../descendant::Literal[@Image='"*"']
+            ]]>
+            </value>
+         </property>
+      </properties>
+   </rule>
+
+   <rule name="Wildcard methods in CORS"
+         language="java"
+         message="Check if *all* should be allowed in the CORS configuration"
+         class="net.sourceforge.pmd.lang.rule.XPathRule">
+      <description>
+         Explicitly declaring the allowed methods for Cross-Origin
+         Resource Sharing in the API enhances the security by disallowing
+         methods whichmay be used to obtain sensitive information
+         from the API.
+      </description>
+      <priority>3</priority>
+      <properties>
+         <property name="version" value="2.0"/>
+         <property name="xpath">
+            <value>
+            <![CDATA[
+            //PrimaryPrefix/Name[@Image='config.addAllowedMethod']/../../descendant::Literal[@Image='"*"']
+            ]]>
+            </value>
+         </property>
+      </properties>
+   </rule>   
+
+</ruleset>
