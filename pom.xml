@@ -25,6 +25,12 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+<!--     <dependency>
+      <groupId>customRule</groupId>
+      <artifactId>NoAllowedOriginsCors</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+ -->
   </dependencies>
 
   <reporting>
@@ -46,14 +52,17 @@
       </plugin>
     </plugins>
   </reporting>-->
-  <repositories>
+  <pluginRepositories>
   <!-- In Project repository -->
-  <repository>
+  <pluginRepository>
     <id>in-project</id>
     <name>In Project Repo</name>
     <url>file://${project.basedir}/ruleset</url>
-  </repository>
-  </repositories>
+    <snapshots>
+        <enabled>false</enabled>
+    </snapshots>
+  </pluginRepository>
+  </pluginRepositories>
 
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
